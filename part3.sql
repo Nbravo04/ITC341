@@ -3,7 +3,7 @@ set echo on;
 set serveroutput on;
 set timing on;
 
--- Part 1
+-- Part 3
 -- Triggers for Department Table 
 create or replace trigger dept_trigger
 after insert on department
