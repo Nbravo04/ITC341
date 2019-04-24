@@ -6,19 +6,21 @@
 
 -- **** Package Declaration **** --
 create or replace package dep_package as
-		
 		procedure num_dependents(EMPSSN in employee.ssn%type);
-		procedure add_dependent(empssn in dependent.empssn%type, dep_name in dependent.dep_name%type, sex in dependent.sex%type, brthdate in dependent.brthdate%type, rship in dependent.rship%type);
-		procedure del_dependent(dessn in dependent.empssn%type);
+		procedure add_dependent(empssn in dependent.essn%type, dep_name in dependent.dependent_name%type, 
+				sex in dependent.sex%type, brthdate in dependent.bdate%type, 
+				rship in dependent.relationship%type);
+		procedure del_dependent(essn in dependent.essn%type, dname in dependent.dependent_name%type);
 		
 end;
 /
 show errors
- create or replace package body dep_package as
+
+create or replace package body dep_package as
 	procedure num_dependents(EMPSSN in employee.ssn%type)
-    	as
+    as
 		dc number;
-    	begin
+    begin
 		select count(*) into dc from employee E, dependent D
 		where EMPSSN = E.ssn and E.ssn = D.essn;
     
@@ -28,9 +30,11 @@ show errors
 		exception
 		when NO_DATA_FOUND then
 			dbms_output.put_line('No data found');
-    	end;
+    end;
 	
-	procedure add_dependent(empssn in dependent.empssn%type, dep_name in dependent.dep_name%type, sex in dependent.sex%type, brthdate in dependent.brthdate%type, rship in dependent.rship%type)
+	procedure add_dependent(empssn in dependent.essn%type, dep_name in dependent.dependent_name%type, 
+			sex in dependent.sex%type, brthdate in dependent.bdate%type, rship in 
+			dependent.relationship%type)
 
 	as
 	begin 
@@ -45,12 +49,12 @@ show errors
      
 	end;
 
-	procedure del_dependent(dessn in dependent.empssn%type)
+	procedure del_dependent(essn in dependent.essn%type, dname in dependent.dependent_name%type)
 	
 	as
 	begin 
 		delete from dependent d
-		where d.empssn = dessn;
+		where d.essn = essn and d.dependent_name = dname;
 		
 		dbms_output.put_line('Dependent was deleted');
 	
@@ -58,17 +62,16 @@ show errors
 		exception
 		when NO_DATA_FOUND then
 		dbms_output.put_line('Employee not found');
-	end; 
-	   
+	end;  
 end;
 /
 show errors
 	   
 -- **** Test **** --
-exec emp_package.num_dependents('333445555');
+exec dep_package.num_dependents('333445555');
 exec dep_package.add_dependent('987654321','Joe', 'M', '04-APR-54', 'Father');
 select* from dependent;
-exec dep_package.del_dependent('987654321');
+exec dep_package.del_dependent('987654321', 'Joe');
 select* from dependent;
 
 rollback;
