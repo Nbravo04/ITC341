@@ -1,6 +1,4 @@
--- Nicholas Bravata
--- Tabbatha Seifert
--- Joshua Machuta
+-- Nicholas Bravata, Tabbatha Seifert, Joshua Machuta
 -- April 22, 2019
 -- Final Project, Triggers.sql 
 -- ITC 341
