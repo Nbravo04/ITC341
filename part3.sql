@@ -29,7 +29,7 @@ rollback;
 -- notice that dnames are all lowercase now
 select * from department;
 
-
+-------------------------------------------------------------
 -- Triggers for Dept_Locations TABLE
 create or replace trigger dept_locations_trigger
 after insert on Dept_Locations
@@ -43,18 +43,19 @@ show errors
 -- before update
 select * from Dept_Locations; 
 
--- update - lowercase dname
+-- update - lowercase chars in Dept_locations
 insert into Dept_Locations values (5, 'Detroit');
 
--- notice that dnames are all uppercase now
+-- notice that chars are all uppercase now
 select * from Dept_Locations; 
 
 -- undo the update (insert)
 rollback; 
 
--- notice that dnames are all lowercase now
+-- notice that chars are all lowercase now
 select * from Dept_Locations;
 
+-------------------------------------------------------------
 -- Triggers for Employee TABLE
 create or replace trigger employee_trigger
 after insert on Employee
@@ -83,4 +84,58 @@ rollback;
 -- notice that dnames are all lowercase now
 select * from Employee;
 
+-------------------------------------------------------------
+-- Triggers for Project TABLE
+create or replace trigger project_trigger
+after insert on Project
+begin
+	update Project SET pname = upper(pname);
+	update Project SET plocation = upper(plocation);
+end;
+/
+show errors
+
+-- **** Test **** --
+-- before update
+select * from Project; 
+
+-- update - lowercase chars in Project
+insert into Project values('Autonomy', 101, 'Detroit', 5);
+
+-- notice that chars are all uppercase now
+select * from Project; 
+
+-- undo the update (insert)
+rollback; 
+
+-- notice that chars are all lowercase now
+select * from Project;
+
+
+-------------------------------------------------------------
+-- Triggers for Dependent TABLE
+create or replace trigger Dependent_trigger
+after insert on Dependent
+begin
+	update Dependent SET department_name = upper(department_name);
+	update Dependent SET relationship = upper(relationship);
+end;
+/
+show errors
+
+-- **** Test **** --
+-- before update
+select * from Dependent; 
+
+-- update - lowercase chars in Dependent
+insert into Dependent values('123456789', 'Maxwell', 'M', '25-OCT-01', 'Son');
+
+-- notice that chars are all uppercase now
+select * from Dependent; 
+
+-- undo the update (insert)
+rollback; 
+
+-- notice that chars are all lowercase now
+select * from Dependent;
 
