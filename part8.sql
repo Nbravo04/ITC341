@@ -6,7 +6,8 @@
 
 -- **** Package Declaration **** --
 create or replace package dep_package as
-
+		
+		procedure count_dependent()
 		procedure add_dependent(empssn in dependent.empssn%type, dep_name in dependent.dep_name%type, sex in dependent.sex%type, brthdate in dependent.brthdate%type, rship in dependent.rship%type);
 		procedure del_dependent(dessn in dependent.empssn%type);
 		
@@ -22,8 +23,8 @@ show errors
 	dbms_output.put_line('Dependent was added.');	
 
 	exception
-     when NO_DATA_FOUND then
-       dbms_output.put_line('Not found');
+     	when NO_DATA_FOUND then
+        dbms_output.put_line('Employee not found');
      
 END;
 
@@ -33,47 +34,18 @@ END;
 	begin 
 	delete from dependent d
 	where d.empssn = dessn;
-	dbms_output.put_line('dependent was deleted');
+	dbms_output.put_line('Dependent was deleted');
 	
-		exception
-		when NO_DATA_FOUND then
-		dbms_output.put_line('Not found');
-	  end; 
+	exception
+	when NO_DATA_FOUND then
+	dbms_output.put_line('Employee not found');
+	end; 
 	   
 	   end;
 	   /
 	   show errors
 	   
-	  exec dep_package.add_dependent('987654321','Dad', 'M', to_date('','YYYY-MM-DD'), 'Father');
+	  exec dep_package.add_dependent('987654321','Joe', 'M', '04-APR-54'), 'Father');
 	  select* from dependent;
 	  exec dep_package.del_dependent('987654321');
 	  select* from dependent;
-	   
-	   declare 
-	mgrname varchar2(50);
-	mgrname2 varchar2(50);
-	
-	
-	begin
---Call Function
-	mgrname := get_manager_name('Research'); 
-	dbms_output.put_line('mgr. name name for ' || 'Research' || ' is ' || mgrname);
-	
-		mgrname := get_manager_name('Printing');
-	if mgrname != '' then
-		dbms_output.put_line('mgr. name for ' || 'Printing' || ' is ' || mgrname);
-	end if;
-end;
-	   
-		begin
---Call Function
-	mgrname2 := get_manager_name('6'); 
-	dbms_output.put_line('mgr. name name for dept number' || '6' || ' is ' || mgrname);
-	
-		mgrname2 := get_manager_name('Printing');
-	if mgrname2 != '' then
-		dbms_output.put_line('mgr. name for ' || 'Printing' || ' is ' || mgrname);
-	end if;
-end;
-
-	
