@@ -54,3 +54,33 @@ rollback;
 
 -- notice that dnames are all lowercase now
 select * from Dept_Locations;
+
+-- Triggers for Employee TABLE
+create or replace trigger employee_trigger
+after insert on Employee
+begin
+	update Employee SET fname = upper(fname);
+	update Employee SET minit = upper(minit);
+	update Employee SET lname = upper(lname);
+	update Employee SET address = upper(address);
+end;
+/
+show errors
+
+-- **** Test **** --
+-- before update
+select * from Employee; 
+
+-- update - lowercase chars in employee
+insert into Employee values ('Nicholas','J','Bravata','231123111','06-MAR-95','2726 Black Eagle Valley Dr., Howell, MI','M',80000,null,4);
+
+-- notice that chars are all uppercase now
+select * from Employee; 
+
+-- undo the update (insert)
+rollback; 
+
+-- notice that dnames are all lowercase now
+select * from Employee;
+
+
