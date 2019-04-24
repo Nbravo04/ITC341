@@ -1,4 +1,4 @@
-set linesize 120;
+set linesize 130;
 set echo on;
 set serveroutput on;
 set timing on;
@@ -43,16 +43,16 @@ show errors
 -- before update
 select * from Dept_Locations; 
 
--- update - lowercase chars in Dept_locations
+-- update - lowercase dname
 insert into Dept_Locations values (5, 'Detroit');
 
--- notice that chars are all uppercase now
+-- notice that dnames are all uppercase now
 select * from Dept_Locations; 
 
 -- undo the update (insert)
 rollback; 
 
--- notice that chars are all lowercase now
+-- notice that dnames are all lowercase now
 select * from Dept_Locations;
 
 -------------------------------------------------------------
@@ -117,7 +117,7 @@ select * from Project;
 create or replace trigger Dependent_trigger
 after insert on Dependent
 begin
-	update Dependent SET department_name = upper(department_name);
+	update Dependent SET dependent_name = upper(dependent_name);
 	update Dependent SET relationship = upper(relationship);
 end;
 /
